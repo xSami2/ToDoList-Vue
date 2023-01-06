@@ -1,5 +1,8 @@
 <script setup>
 import  {computed, reactive, ref } from "vue";
+import {ChevronDownIcon} from '@heroicons/vue/24/solid'
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+
 import Button from "@/components/Button.vue";
 
 
@@ -55,7 +58,7 @@ function AddTask(HomeWorkAdd ){
 
 </script>
 <template>
-<div class="bg-white p-6  mt-4 mb-4 rounded-md">
+<div class="bg-white p-6  mt-4 mb-4 rounded-lg">
 <h2 class="font-bold mb-4 text-center"> To Do List</h2>
 
 
@@ -100,11 +103,42 @@ function AddTask(HomeWorkAdd ){
 
 <form @submit.prevent="AddTask(HomeWorkAdd)"  class="flex flex-col mt-4">
     <input type="text" placeholder="Add Task..." class="border mb-3" v-model="HomeWorkAdd">
-    <Button title="Add Task"/>
+  <div class="flex">
+    <Button title="Add Task" class="w-full mr-1 "/>
+
+    <Menu>
+  <div class="relative">
+      <MenuButton class="bg-white rounded flex items-center   px-3 py-1">
+        <span class="p-1">Category</span>
+        <ChevronDownIcon class="w-4 h-4 ml-1"/>
+      </MenuButton>
+
+      <MenuItems  class="absolute  bg-white rounded-lg shadow-md flex flex-col focus:outline-none w-32 text-left mt-1">
+        <MenuItem  v-slot="{ active }">
+          <button class="text-left px-2 py-2" :class='{ "bg-blue-500 text-white rounded-lg": active }' >University</button>
+        </MenuItem>
+        <MenuItem  v-slot="{ active }">
+          <button class="text-left px-2 py-2" :class='{ "bg-blue-500 text-white rounded-lg": active }' >Work</button>
+        </MenuItem>
+        <MenuItem  v-slot="{ active }">
+          <button class="text-left px-2 py-2" :class='{ "bg-blue-500 text-white rounded-lg": active }' >Personal</button>
+        </MenuItem>
+      </MenuItems>
+  </div>
+    </Menu>
+  </div>
+
   </form>
   <div class="mt-3">
     <Button title="Delete All Tasks" class="bg-red-600 hover:bg-red-800 w-full"  @click="DeleteAllTask"/>
-
   </div>
+
+
+
+
+
+
+
+
 </template>
 

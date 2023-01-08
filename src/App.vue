@@ -34,10 +34,12 @@ let unCompletedHomeworks = computed( () => {
 let Category = ['University','Work','Personal']
 
 let HomeWorkAdd = ref('');
-let selected = ref('');
+let selected = ref('Category');
+let selectedtoFilter = ref('Category');
 
 function ResetInput() {
   HomeWorkAdd.value = '';
+  selected.value = 'Category'
 }
 function DeleteAllTask() {
   for (let i = 0; i < HomeWorks.length; i++)
@@ -65,20 +67,20 @@ function AddTask(HomeWorkAdd,selected ){
 <div class="bg-white p-6  mt-4 mb-4 rounded-lg">
 <h2 class="font-bold mb-4 text-center"> To Do List</h2>
 
+  <div  class="grid grid-cols-3 text-left font-bold mb-3">
+    <div >Name</div>
+    <div class="text-center">
+      <select v-model="selectedtoFilter" class="rounded" >
+        <option disabled> Category</option>
+        <option v-for="item in Category">{{item}}</option>
+      </select>
+    </div>
+   <div>Status</div>
+  </div>
 
   <div>
-    <h2 class="font-bold mb-2 text-left" > inProgress</h2>
-    <div  v-show="unCompletedHomeworks" class="grid grid-cols-3 text-left font-bold mb-3">
-      <p>Name</p>
-      <p class="text-center">Category</p>
-      <div class="flex justify-between">
-        <p></p>
-        <p></p>
-      </div>
-    </div>
-    <ul  v-for="item in HomeWorks.filter(item => !item.status)" :key="item.id" class="grid grid-cols-3">
-
-
+  <div class="divide-y">
+    <ul v-show="unCompletedHomeworks" v-for="item in HomeWorks.filter(item => !item.status)" :key="item.id" class="grid grid-cols-3">
       <li class="flex justify-between items-center mr-4 ">{{item.name}}</li>
       <p class="text-center"> {{item.category}}</p>
       <div class="flex justify-between">
@@ -87,34 +89,18 @@ function AddTask(HomeWorkAdd,selected ){
       </div>
     </ul>
   </div>
-
-<div class="border-b-4 border-blue-700 mt-4 mb-4">
-</div>
-
-
-  <div>
-    <h2 class="font-bold mb-2 text-left" > Done</h2>
-    <div  v-show="CompletedHomeworks" class="grid grid-cols-3 text-left font-bold mb-3">
-      <p>Name</p>
-      <p class="text-center">Category</p>
-      <div class="flex justify-between">
-      <p></p>
-      <p></p>
-      </div>
-    </div>
-    <ul  v-for="item in HomeWorks.filter(item => item.status)" :key="item.id" class="grid grid-cols-3">
-
-
+<div class="border-b-4 border-blue-700 mt-4 mb-4"></div>
+  <div class="divide-y">
+    <ul v-show="CompletedHomeworks" v-for="item in HomeWorks.filter(item => item.status)" :key="item.id" class="grid grid-cols-3">
       <li class="flex justify-between items-center mr-4 ">{{item.name}}</li>
       <p class="text-center"> {{item.category}}</p>
       <div class="flex justify-between">
-      <input type="checkbox" v-model="item.status" class="ml-2">
-      <button class="font-bold text-base text-red-800"  @click="delete HomeWorks[item.id-1]">Delete</button>
+        <input type="checkbox" v-model="item.status" class="ml-2">
+        <button class="font-bold text-base text-red-800"  @click="delete HomeWorks[item.id-1]">Delete</button>
       </div>
     </ul>
   </div>
-
-
+  </div>
 
 
 
@@ -127,7 +113,7 @@ function AddTask(HomeWorkAdd,selected ){
   <div class="flex">
     <Button title="Add Task" class="w-full mr-1 "/>
     <select v-model="selected" class="rounded p-2 px-5" >
-      <option disabled value="">Category</option>
+      <option disabled v-text="selected"></option>
       <option v-for="item in Category">{{item}}</option>
     </select>
   </div>

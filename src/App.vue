@@ -8,19 +8,19 @@ let HomeWorks = reactive([
   {
     id : 1 ,
     name : "Math HomeWork",
-    category :'School',
+    category :'University',
     status : false
   },
   {
     id : 2 ,
     name : "Phys HomeWork",
-    category :'School',
+    category :'University',
     status : false
   },
   {
     id : 3 ,
     name : "History HomeWork",
-    category :'School',
+    category :'University',
     status : false
   },
 
@@ -32,10 +32,9 @@ let unCompletedHomeworks = computed( () => {
   return HomeWorks.filter(a => !a.status).length
 }); // Show unCompleted Homework
 let Category = ['University','Work','Personal']
-
 let HomeWorkAdd = ref('');
 let selected = ref('Category');
-let selectedtoFilter = ref('Category');
+let selectedtoFilter = ref('All');
 
 function ResetInput() {
   HomeWorkAdd.value = '';
@@ -48,8 +47,8 @@ function DeleteAllTask() {
   }
 }
 function AddTask(HomeWorkAdd,selected ){
-  if(HomeWorkAdd.length === 0 ) {
-    alert("Insert Something pls")
+  if(HomeWorkAdd.length === 0 || selected === 'Category' ) {
+    alert("You Have Missed to Insert a Name or Category")
   }
   else {
     HomeWorks.push({
@@ -61,26 +60,24 @@ function AddTask(HomeWorkAdd,selected ){
     ResetInput()
   }
 }
-
 </script>
 <template>
 <div class="bg-white p-6  mt-4 mb-4 rounded-lg">
 <h2 class="font-bold mb-4 text-center"> To Do List</h2>
-
   <div  class="grid grid-cols-3 text-left font-bold mb-3">
     <div >Name</div>
     <div class="text-center">
-      <select v-model="selectedtoFilter" class="rounded" >
-        <option disabled> Category</option>
+      <select v-model="selectedtoFilter"  class="rounded" >
+        <option> All</option>
         <option v-for="item in Category">{{item}}</option>
       </select>
     </div>
-   <div>Status</div>
+    <div>Status</div>
   </div>
 
-  <div>
   <div class="divide-y">
-    <ul v-show="unCompletedHomeworks" v-for="item in HomeWorks.filter(item => !item.status)" :key="item.id" class="grid grid-cols-3">
+
+    <ul v-show="unCompletedHomeworks" v-for="item in HomeWorks.filter(item => item.status || item.category === selectedtoFilter)" :key="item.id" class="grid grid-cols-3">
       <li class="flex justify-between items-center mr-4 ">{{item.name}}</li>
       <p class="text-center"> {{item.category}}</p>
       <div class="flex justify-between">
@@ -89,9 +86,14 @@ function AddTask(HomeWorkAdd,selected ){
       </div>
     </ul>
   </div>
-<div class="border-b-4 border-blue-700 mt-4 mb-4"></div>
+
+
+
+
+
+  <div class="border-b-4 border-blue-700 mt-4 mb-4"></div>
   <div class="divide-y">
-    <ul v-show="CompletedHomeworks" v-for="item in HomeWorks.filter(item => item.status)" :key="item.id" class="grid grid-cols-3">
+    <ul v-show="CompletedHomeworks" v-for="item in HomeWorks.filter( item => item.status && item.category === selectedtoFilter )" :key="item.id" class="grid grid-cols-3">
       <li class="flex justify-between items-center mr-4 ">{{item.name}}</li>
       <p class="text-center"> {{item.category}}</p>
       <div class="flex justify-between">
@@ -100,13 +102,9 @@ function AddTask(HomeWorkAdd,selected ){
       </div>
     </ul>
   </div>
-  </div>
-
 
 
 </div>
-
-
 
 <form @submit.prevent="AddTask(HomeWorkAdd ,selected )"  class="flex flex-col mt-4">
     <input type="text" placeholder="Add Task..." class="border mb-3" v-model="HomeWorkAdd">
@@ -121,5 +119,6 @@ function AddTask(HomeWorkAdd,selected ){
   <div class="mt-3">
     <Button title="Delete All Tasks" class="bg-red-600 hover:bg-red-800 w-full"  @click="DeleteAllTask"/>
   </div>
+
 </template>
 
